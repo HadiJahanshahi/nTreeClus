@@ -24,7 +24,7 @@ my_list = ['evidence','evident','provide','unconventional','convene']
 nTreeClusModel = nTreeClus(my_list, method = "All")
 nTreeClusModel
 ```
-* Result *
+*Result*
 ```
 # {'C_DT': 2,
 # 'C_RF': 2,
