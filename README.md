@@ -38,4 +38,4 @@ nTreeClusModel
 
 As the output indicate, the number of optimal clusters `C_DT` and `C_RF` is 2 whether Decision Tree or Random Forest is used. Furthermore, the correct label for both methods is `[0, 0, 0, 1, 1]` indicating the first three are from cluster 0 and the last two items are from cluster 1. 
 
-![alt text](http://url/to/img.png)
+![alt text](https://media.gettyimages.com/photos/racegoers-arrive-on-the-second-day-of-the-royal-ascot-horse-racing-picture-id979343594)
