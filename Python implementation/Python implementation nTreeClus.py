@@ -1,10 +1,5 @@
-
-# coding: utf-8
-
-
-
 def nTreeClus(my_list, n = None, method = "All", ntree = 10, C = None):
-    """ nTreeClus is a clustering method by Mustafa Gökçe Baydoğan and Hadi Jahanshahi.
+    """ nTreeClus is a clustering method by Mustafa Gokce Baydogan and Hadi Jahanshahi.
     The method is suitable for clustering categorical time series (sequences). 
     You can always have access to the examples and description in 
     https://github.com/HadiJahanshahi/nTreeClus
