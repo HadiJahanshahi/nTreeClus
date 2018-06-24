@@ -16,6 +16,13 @@ This is open source code repository for nTreeClus. nTreeClus is an intersection 
 If using this code or dataset, please cite it.
 
 
+## Prerequisite libraries
+* numpy
+* pandas
+* sklearn
+* scipy
+
+
 ## Quick validation of the code
 Assume we are going to compare these words together: `evidence`, `evident`, `provide`, `unconventional`, and `convene`. Probably the first three having the same root `vid` (see) should be in the same cluster and the last two words having the prefix `con` (together)  and the root `ven` (come) should be clustered as another cluster. We test it using nTreeClus. 
 
