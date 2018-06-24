@@ -43,8 +43,8 @@ nTreeClus(my_list, n, method = "All", ntree = 10, C)
 ### Outputs
 * **C_DT**: "the optimal number of clusters with the aid of Decision Tree",
 * **C_RF**: "the optimal number of clusters with the aid of Random Forest",
-* **distance_DT**: "sparce disance between sequences with the aid of Decision Tree",
-* **distance_RF**: "sparce disance between sequences with the aid of Random Forest",
+* **distance_DT**: "sparse disance between sequences with the aid of Decision Tree",
+* **distance_RF**: "sparse disance between sequences with the aid of Random Forest",
 * **labels_DT**: "labels based on the optimal number of clusters using DT",
 * **labels_RF**: "labels based on the optimal number of clusters using RF".
 
