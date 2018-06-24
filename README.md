@@ -31,9 +31,12 @@ nTreeClus(my_list, n, method = "All", ntree = 10, C)
 * **my_list**: is a of sequences to be clustered
 * **n**: "the window length" or "n" in nTreecluss, you may provide it or it will be calculated automatically if no input has been suggested.
 * **method**: 
+
     **DT**: Decision Tree
+    
     **RF**: Random Forest
-    **All**: both methods
+    
+    **All**: both methods (defualt)
 * **ntree**: number of trees to be used in RF method. The defualt value is 10.
 * **C**: number of clusters if it is not provided, it will be calculated for 2 to 10.
 
