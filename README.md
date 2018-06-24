@@ -23,6 +23,30 @@ If using this code or dataset, please cite it.
 * scipy
 
 
+## Explaining the nTreeClus function
+```
+nTreeClus(my_list, n, method = "All", ntree = 10, C)
+```
+### Inputs
+* **my_list**: is a of sequences to be clustered
+* **n**: "the window length" or "n" in nTreecluss, you may provide it or it will be calculated automatically if no input has been suggested.
+* **method**: 
+    **DT**: Decision Tree
+    **RF**: Random Forest
+    **All**: both methods
+* **ntree**: number of trees to be used in RF method. The defualt value is 10.
+* **C**: number of clusters if it is not provided, it will be calculated for 2 to 10.
+
+### Outputs
+* **C_DT**: "the optimal number of clusters with the aid of Decision Tree",
+* **C_RF**: "the optimal number of clusters with the aid of Random Forest",
+* **distance_DT**: "sparce disance between sequences with the aid of Decision Tree",
+* **distance_RF**: "sparce disance between sequences with the aid of Random Forest",
+* **labels_DT**: "labels based on the optimal number of clusters using DT",
+* **labels_RF**: "labels based on the optimal number of clusters using RF".
+
+
+
 ## Quick validation of the code
 Assume we are going to compare these words together: `evidence`, `evident`, `provide`, `unconventional`, and `convene`. Probably the first three having the same root `vid` (see) should be in the same cluster and the last two words having the prefix `con` (together)  and the root `ven` (come) should be clustered as another cluster. We test it using nTreeClus. 
 
