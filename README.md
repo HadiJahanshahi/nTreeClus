@@ -40,7 +40,9 @@ As the output indicate, the number of optimal clusters `C_DT` and `C_RF` is 2 wh
 
 
 **Graphical Output**
+
 The graphical dendogram of the example clearly shows how the words are related and which ones have the closest similarity.  
+
 ```
 from scipy.cluster.hierarchy import dendrogram, linkage
 from matplotlib import pyplot as plt
@@ -68,4 +70,22 @@ plt.show()
 ![nTreeClus simple example using RF support](https://image.ibb.co/nQQsC8/n_Tree_Clus_HC_RF.png)
 
 
+As the figures show, the output of RF and DT implementation of nTreeClus is very similar.
 
+**Distance Matrix**
+
+In order to have distance matrix in a a square-form distance matrix, the below code and using scipy library (`scipy.spatial.distance.squareform`): 
+
+
+```
+from scipy.spatial.distance import squareform
+squareform(nTreeClusModel["distance_DT"])
+```
+*output*
+```
+#array([[ 0.        ,  0.05508882,  0.43305329,  0.68551455,  0.43305329],
+#       [ 0.05508882,  0.        ,  0.5       ,  0.7226499 ,  0.5       ],
+#       [ 0.43305329,  0.5       ,  0.        ,  0.86132495,  0.75      ],
+#       [ 0.68551455,  0.7226499 ,  0.86132495,  0.        ,  0.4452998 ],
+#       [ 0.43305329,  0.5       ,  0.75      ,  0.4452998 ,  0.        ]])
+```
