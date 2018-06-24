@@ -17,7 +17,9 @@ If using this code or dataset, please cite it.
 
 
 ## Quick validation of your code
-Assume we are going to compare these words together: evidence, evident, provide, unconventional, and convene. Probably the first three of them having the same root "vid" should be in the first cluster and the last two words having the prefix "con" and the root "ven" should be clustered in another cluster. We test it using nTreeClus. At first, call pythonoic function of nTreeClus existing in the folder `Python implementation`, and then
+Assume we are going to compare these words together: `evidence`, `evident`, `provide`, `unconventional`, and `convene`. Probably the first three having the same root `vid` (see) should be in the same cluster and the last two words having the prefix `con` (together)  and the root `ven` (come) should be clustered as another cluster. We test it using nTreeClus. 
+
+**NOTE**: Before using the below code, you shoud call Pythonic function of nTreeClus existing in the folder `Python implementation`.
 
 ```
 my_list = ['evidence','evident','provide','unconventional','convene']
@@ -36,7 +38,7 @@ nTreeClusModel
 # 'labels_RF': array([0, 0, 0, 1, 1])}
 ```
 
-As the output indicate, the number of optimal clusters `C_DT` and `C_RF` is 2 whether Decision Tree or Random Forest is used. Furthermore, the correct label for both methods is `[0, 0, 0, 1, 1]` indicating the first three are from cluster 0 and the last two items are from cluster 1. 
+As the output indicates, the number of optimal clusters `C_DT` and `C_RF` is 2 whether Decision Tree or Random Forest is used. Furthermore, the correct label for both methods is `[0, 0, 0, 1, 1]` indicating the first three are from cluster 0 and the last two items are from cluster 1. The result is consistent with our pre-knowledge about the data.
 
 
 **Graphical Output**
@@ -70,12 +72,11 @@ plt.show()
 ![nTreeClus simple example using RF support](https://image.ibb.co/nQQsC8/n_Tree_Clus_HC_RF.png)
 
 
-As the figures show, the output of RF and DT implementation of nTreeClus is very similar.
+As the figures demonstrate, the output of RF and DT implementation of nTreeClus is very similar and the method is robust to the selected approach.
 
 **Distance Matrix**
 
-In order to have distance matrix in a a square-form distance matrix, the below code and using scipy library (`scipy.spatial.distance.squareform`): 
-
+In order to have distance matrix in a square-form, the below code and scipy library (`scipy.spatial.distance.squareform`) should be used: 
 
 ```
 from scipy.spatial.distance import squareform
