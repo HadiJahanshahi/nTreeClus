@@ -37,8 +37,8 @@ nTreeClus(my_list, n, method = "All", ntree = 10, C)
     **RF**: Random Forest
     
     **All**: both methods (defualt)
-* **ntree**: number of trees to be used in RF method. The defualt value is 10.
-* **C**: number of clusters if it is not provided, it will be calculated for 2 to 10.
+* **ntree**: the number of trees to be used in RF method. The defualt value is 10.
+* **C**: the number of clusters. If it is not provided, it will be calculated for `C` between 2 to 10.
 
 ### Outputs
 * **C_DT**: "the optimal number of clusters with the aid of Decision Tree",
