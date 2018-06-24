@@ -38,4 +38,34 @@ nTreeClusModel
 
 As the output indicate, the number of optimal clusters `C_DT` and `C_RF` is 2 whether Decision Tree or Random Forest is used. Furthermore, the correct label for both methods is `[0, 0, 0, 1, 1]` indicating the first three are from cluster 0 and the last two items are from cluster 1. 
 
-![alt text](https://media.gettyimages.com/photos/racegoers-arrive-on-the-second-day-of-the-royal-ascot-horse-racing-picture-id979343594)
+
+**Graphical Output**
+The graphical dendogram of the example clearly shows how the words are related and which ones have the closest similarity.  
+```
+from scipy.cluster.hierarchy import dendrogram, linkage
+from matplotlib import pyplot as plt
+
+HC_tree_terminal_cosine = linkage(nTreeClusModel["distance_DT"], 'ward')
+fig = plt.figure(figsize=(25, 10))
+ax = fig.add_subplot(1, 1, 1)
+dendrogram(HC_tree_terminal_cosine,labels=my_list, ax=ax)
+ax.tick_params(axis='x', which='major', labelsize=25)
+ax.tick_params(axis='y', which='major', labelsize=15)
+plt.show()
+```
+![nTreeClus simple example using DT support](https://image.ibb.co/gPaZs8/n_Tree_Clus_HC_DT.png)
+
+
+```
+HC_RF_terminal_cosine = linkage(nTreeClusModel["distance_RF"], 'ward')
+fig = plt.figure(figsize=(25, 10))
+ax = fig.add_subplot(1, 1, 1)
+dendrogram(HC_RF_terminal_cosine,labels=my_list, ax=ax)
+ax.tick_params(axis='x', which='major', labelsize=25)
+ax.tick_params(axis='y', which='major', labelsize=15)
+plt.show()
+```
+![nTreeClus simple example using RF support](https://image.ibb.co/nQQsC8/n_Tree_Clus_HC_RF.png)
+
+
+
