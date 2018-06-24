@@ -103,7 +103,7 @@ ax.tick_params(axis='x', which='major', labelsize=25)
 ax.tick_params(axis='y', which='major', labelsize=15)
 plt.show()
 ```
-![nTreeClus simple example using RF support](https://image.ibb.co/nQQsC8/n_Tree_Clus_HC_RF.png)
+![nTreeClus simple example using RF support](https://image.ibb.co/ndD4s8/n_Tree_Clus_HC_RF.png)
 
 
 As the figures demonstrate, the output of RF and DT implementation of nTreeClus is very similar and the method is robust to the selected approach.
