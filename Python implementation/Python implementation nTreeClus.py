@@ -31,7 +31,7 @@ def nTreeClus(my_list, n = None, method = "All", ntree = 10, C = None):
         'labels_RF': "labels based on the optimal number of clusters using RF".
             
             NOTE: in order to convert the distance output to a square distance matrix, 
-                "scipy.spatial.distance.pdist" should be used.
+                "scipy.spatial.distance.squareform" should be used.
                 
     ## simple example with the output
     my_list = ['evidence','evident','provide','unconventional','convene']
