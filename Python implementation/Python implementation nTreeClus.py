@@ -12,14 +12,16 @@ def nTreeClus(my_list, n = None, method = "All", ntree = 10, C = None):
         scipy
     
     Args:
-        my_list: is a of sequences to be clustered
+        my_list: a list of sequences to be clustered
         n: "the window length" or "n" in nTreecluss, you may provide it or it will be
             calculated automatically if no input has been suggested.
         method: 
             DT: Decision Tree
             RF: Random Forest
             All: both methods
-        ntree: number of trees to be used in RF method. The defualt value is 10. (Being too small has a bad effect on accuracy and being too large increases the complexity. no less than 5 and no greater than 20.)
+        ntree: number of trees to be used in RF method. The defualt value is 10. 
+             (Being too small has a bad effect on accuracy and being too large increases the complexity. 
+              no less than 5 and no greater than 20.)
         C: number of clusters if it is not provided, it will be calculated for 2 to 10.
 
     Returns:
