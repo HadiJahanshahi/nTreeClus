@@ -28,7 +28,7 @@ If using this code or dataset, please cite it.
 nTreeClus(my_list, n, method = "All", ntree = 10, C)
 ```
 ### Inputs
-* **my_list**: is a of sequences to be clustered
+* **my_list**: a list of sequences to be clustered
 * **n**: "the window length" or "n" in nTreecluss, you may provide it or it will be calculated automatically if no input has been suggested.
 * **method**: 
 
