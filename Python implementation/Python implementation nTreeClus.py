@@ -67,10 +67,11 @@ def nTreeClus(my_list, n = None, method = "All", ntree = 10, C = None):
     if n is None:
         min_length = min( map(len, my_list) )
         total_avg = round(sum( map(len, my_list) ) / len(my_list)) # average length of strings
-        n = min (round(total_avg**0.5) + 1 , min_length - 1)
+        n = min (round(total_avg**0.5) + 1, min_length - 1)
     
     if (n < 3):
         raise ValueError("Parameter n could not be less than 3. Remove the sequences with the length shorter than 3 and then re-run the function.")
+    
     
     ############# matrix segmentation #################
     firstiteration = 1
@@ -95,16 +96,14 @@ def nTreeClus(my_list, n = None, method = "All", ntree = 10, C = None):
     seg_mat = pd.get_dummies(seg_mat).reset_index(drop=True)
 
     
-
-	############# nTreeClus method using DT #################
     xtrain = seg_mat.drop(labels=['OriginalMAT_element','Class'],axis=1)
     ytrain = seg_mat['Class']
 
+    ############# nTreeClus method using DT #################        
     if (method == "All") or (method == "DT"):
         dtree = DecisionTreeClassifier()
         fitted_tree = dtree.fit(X=xtrain,y=ytrain)
         predictiontree = dtree.predict(xtrain)
-
         ### finding the terminal nodes.
         terminal_tree = fitted_tree.tree_.apply(xtrain.values.astype('float32'))  #terminal output
         terminal_output_tree  = pd.DataFrame(terminal_tree)
@@ -127,9 +126,9 @@ def nTreeClus(my_list, n = None, method = "All", ntree = 10, C = None):
         assignment_tree_terminal_cosine = cluster.hierarchy.cut_tree(HC_tree_terminal_cosine,C).ravel() #.ravel makes it 1D array.
     
         
-        
-	############# nTreeClus method using RF #################
+    ############# nTreeClus method using RF #################        
     if (method == "All") or (method == "RF"):
+        np.random.seed(123)
         forest = RandomForestClassifier(n_estimators= ntree ,max_features = 0.36)
         fitted_forest = forest.fit(X=xtrain,y=ytrain)
         predictionforest = forest.predict(xtrain)
@@ -141,7 +140,6 @@ def nTreeClus(my_list, n = None, method = "All", ntree = 10, C = None):
         for col in terminal_forest:
             terminal_forest[col] = '{}_'.format(col) + terminal_forest[col]
         terminal_forest.head()
-
         for i in range(terminal_forest.shape[1]):
             if i == 0:
                 tempor = pd.concat( [seg_mat['OriginalMAT_element'] , terminal_forest[i]],ignore_index=True,axis=1)
