@@ -58,7 +58,7 @@ Assume we are going to compare these words together: `evidence`, `evident`, `pro
 
 ```
 my_list = ['evidence','evident','provide','unconventional','convene']
-nTreeClusModel = nTreeClus(my_list, method = "All")
+nTreeClusModel = nTreeClus(my_list)
 nTreeClusModel
 ```
 **Result**
