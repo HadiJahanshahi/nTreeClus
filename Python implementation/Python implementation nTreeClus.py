@@ -1,5 +1,5 @@
 def nTreeClus(my_list, n = None, method = "All", ntree = 10, C = None):
-    """ nTreeClus is a clustering method by Mustafa Gökçe Baydoğan and Hadi Jahanshahi.
+    """ nTreeClus is a clustering method by Mustafa Gokce Baydogan and Hadi Jahanshahi.
     The method is suitable for clustering categorical time series (sequences). 
     You can always have access to the examples and description in 
     https://github.com/HadiJahanshahi/nTreeClus
@@ -166,7 +166,7 @@ def nTreeClus(my_list, n = None, method = "All", ntree = 10, C = None):
         optimal_cluster_RF = C
         assignment_RF_terminal_cosine = cluster.hierarchy.cut_tree(HC_RF_terminal_cosine,C).ravel() #.ravel makes it 1D array.
 
-        
+    ############# output #################                
     if (method == "All"):
         return {"distance_DT":Dist_tree_terminal_cosine, "labels_DT":assignment_tree_terminal_cosine, "C_DT":optimal_cluster_tree, "distance_RF":Dist_RF_terminal_cosine, "labels_RF": assignment_RF_terminal_cosine, "C_RF":optimal_cluster_RF, "Parameter n":n}
     elif (method == "DT"):
