@@ -37,12 +37,13 @@ nTreeClus(my_list, n, method = "All", ntree = 10, C)
     **RF**: Random Forest
     
     **All**: both methods (defualt)
-* **ntree**: the number of trees to be used in RF method. The defualt value is 10.
+* **ntree**: the number of trees to be used in RF method. The defualt value is 10. (Being too small has a bad effect on accuracy and being too large increases the complexity. So, no less than 5 and no greater than 20.)
 * **C**: the number of clusters. If it is not provided, it will be calculated for `C` between 2 to 10.
 
 ### Outputs
 * **C_DT**: "the optimal number of clusters with the aid of Decision Tree",
 * **C_RF**: "the optimal number of clusters with the aid of Random Forest",
+* **'Parameter n'**: the parameter of the nTreeClus (n) - either calculated or manually given
 * **distance_DT**: "sparse disance between sequences with the aid of Decision Tree",
 * **distance_RF**: "sparse disance between sequences with the aid of Random Forest",
 * **labels_DT**: "labels based on the optimal number of clusters using DT",
@@ -63,16 +64,17 @@ nTreeClusModel
 **Result**
 ```
 # {'C_DT': 2,
-# 'C_RF': 2,
-# 'distance_DT': array([ 0.05508882,  0.43305329,  0.68551455,  0.43305329,  0.5       ,
-#         0.7226499 ,  0.5       ,  0.86132495,  0.75      ,  0.4452998 ]),
-# 'distance_RF': array([ 0.0809925 ,  0.56793679,  0.42158647,  0.57878823,  0.56917978,
-#         0.47984351,  0.54545455,  0.55864167,  0.71278652,  0.3341997 ]),
-# 'labels_DT': array([0, 0, 0, 1, 1]),
-# 'labels_RF': array([0, 0, 0, 1, 1])}
+#  'C_RF': 2,
+#  'Parameter n': 4,
+#  'distance_DT': array([ 0.05508882,  0.43305329,  0.68551455,  0.43305329,  0.5       ,
+#          0.7226499 ,  0.5       ,  0.86132495,  0.75      ,  0.4452998 ]),
+#  'distance_RF': array([ 0.0901846 ,  0.51652419,  0.55690357,  0.64739882,  0.5052095 ,
+#          0.66620194,  0.66824925,  0.61354484,  0.76682897,  0.31402302]),
+#  'labels_DT': array([0, 0, 0, 1, 1]),
+#  'labels_RF': array([0, 0, 0, 1, 1])}
 ```
 
-As the output indicates, the number of optimal clusters `C_DT` and `C_RF` is 2 whether Decision Tree or Random Forest is used. Furthermore, the correct label for both methods is `[0, 0, 0, 1, 1]` indicating the first three are from cluster 0 and the last two items are from cluster 1. The result is consistent with our pre-knowledge about the data.
+As the output indicates, the number of optimal clusters `C_DT` and `C_RF` is 2 whether Decision Tree or Random Forest is used. Furthermore, the correct label for both methods is `[0, 0, 0, 1, 1]` indicating the first three are from cluster 0 and the last two items are from cluster 1. The result is consistent with our pre-knowledge about the data. The parameter *n* or windows size is calculated and is 4 in this case.
 
 
 **Graphical Output**
@@ -118,9 +120,9 @@ squareform(nTreeClusModel["distance_DT"])
 ```
 *output*
 ```
-#array([[ 0.        ,  0.05508882,  0.43305329,  0.68551455,  0.43305329],
-#       [ 0.05508882,  0.        ,  0.5       ,  0.7226499 ,  0.5       ],
-#       [ 0.43305329,  0.5       ,  0.        ,  0.86132495,  0.75      ],
-#       [ 0.68551455,  0.7226499 ,  0.86132495,  0.        ,  0.4452998 ],
-#       [ 0.43305329,  0.5       ,  0.75      ,  0.4452998 ,  0.        ]])
+# array([[ 0.        ,  0.05508882,  0.43305329,  0.68551455,  0.43305329],
+#        [ 0.05508882,  0.        ,  0.5       ,  0.7226499 ,  0.5       ],
+#        [ 0.43305329,  0.5       ,  0.        ,  0.86132495,  0.75      ],
+#        [ 0.68551455,  0.7226499 ,  0.86132495,  0.        ,  0.4452998 ],
+#        [ 0.43305329,  0.5       ,  0.75      ,  0.4452998 ,  0.        ]])
 ```
