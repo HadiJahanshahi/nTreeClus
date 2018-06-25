@@ -1,5 +1,5 @@
 def nTreeClus(my_list, n = None, method = "All", ntree = 10, C = None):
-    """ nTreeClus is a clustering method by Mustafa Gokce Baydogan and Hadi Jahanshahi.
+    """ nTreeClus is a clustering method by Mustafa Gökçe Baydoğan and Hadi Jahanshahi.
     The method is suitable for clustering categorical time series (sequences). 
     You can always have access to the examples and description in 
     https://github.com/HadiJahanshahi/nTreeClus
@@ -19,12 +19,13 @@ def nTreeClus(my_list, n = None, method = "All", ntree = 10, C = None):
             DT: Decision Tree
             RF: Random Forest
             All: both methods
-        ntree: number of trees to be used in RF method. The defualt value is 10.
+        ntree: number of trees to be used in RF method. The defualt value is 10. (Being too small has a bad effect on accuracy and being too large increases the complexity. no less than 5 and no greater than 20.)
         C: number of clusters if it is not provided, it will be calculated for 2 to 10.
 
     Returns:
         'C_DT': "the optimal number of clusters with the aid of Decision Tree",
         'C_RF': "the optimal number of clusters with the aid of Random Forest",
+        'Parameter n': the parameter of the nTreeClus (n) - either calculated or manually given
         'distance_DT': "sparse disance between sequences with the aid of Decision Tree",
         'distance_RF': "sparse disance between sequences with the aid of Random Forest",
         'labels_DT': "labels based on the optimal number of clusters using DT",
@@ -64,8 +65,12 @@ def nTreeClus(my_list, n = None, method = "All", ntree = 10, C = None):
     sequence_sep[sequence_sep.shape[1]] = None # adding an empty column to the end of sequence
 
     if n is None:
+        min_length = min( map(len, my_list) )
         total_avg = round(sum( map(len, my_list) ) / len(my_list)) # average length of strings
-        n =round(total_avg**0.5)+1
+        n = min (round(total_avg**0.5) + 1 , min_length - 1)
+    
+    if (n < 3):
+        raise ValueError("Parameter n could not be less than 3. Remove the sequences with the length shorter than 3 and then re-run the function.")
     
     ############# matrix segmentation #################
     firstiteration = 1
@@ -163,23 +168,8 @@ def nTreeClus(my_list, n = None, method = "All", ntree = 10, C = None):
 
         
     if (method == "All"):
-        return {"distance_DT":Dist_tree_terminal_cosine, "labels_DT":assignment_tree_terminal_cosine, "C_DT":optimal_cluster_tree, "distance_RF":Dist_RF_terminal_cosine, "labels_RF": assignment_RF_terminal_cosine, "C_RF":optimal_cluster_RF}
+        return {"distance_DT":Dist_tree_terminal_cosine, "labels_DT":assignment_tree_terminal_cosine, "C_DT":optimal_cluster_tree, "distance_RF":Dist_RF_terminal_cosine, "labels_RF": assignment_RF_terminal_cosine, "C_RF":optimal_cluster_RF, "Parameter n":n}
     elif (method == "DT"):
-        return {"distance_DT":Dist_tree_terminal_cosine, "labels_DT":assignment_tree_terminal_cosine, "C_DT":optimal_cluster_tree}
+        return {"distance_DT":Dist_tree_terminal_cosine, "labels_DT":assignment_tree_terminal_cosine, "C_DT":optimal_cluster_tree, "Parameter n":n}
     else: 
-        return {"distance_RF":Dist_RF_terminal_cosine, "labels_RF":assignment_RF_terminal_cosine, "C_DT":optimal_cluster_RF}
-
-
-
-#simple example with the output
-my_list = ['evidence','evident','provide','unconventional','convene']
-nTreeClusModel = nTreeClus(my_list, method = "All")
-# {'C_DT': 2,
-# 'C_RF': 2,
-# 'distance_DT': array([ 0.05508882,  0.43305329,  0.68551455,  0.43305329,  0.5       ,
-#         0.7226499 ,  0.5       ,  0.86132495,  0.75      ,  0.4452998 ]),
-# 'distance_RF': array([ 0.0809925 ,  0.56793679,  0.42158647,  0.57878823,  0.56917978,
-#         0.47984351,  0.54545455,  0.55864167,  0.71278652,  0.3341997 ]),
-# 'labels_DT': array([0, 0, 0, 1, 1]),
-# 'labels_RF': array([0, 0, 0, 1, 1])}
-
+        return {"distance_RF":Dist_RF_terminal_cosine, "labels_RF":assignment_RF_terminal_cosine, "C_DT":optimal_cluster_RF, "Parameter n":n}
