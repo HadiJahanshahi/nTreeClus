@@ -11,7 +11,7 @@ by Mustafa Gökçe Baydoğan and Hadi Jahanshahi
 
 
 #### Maintained by: Hadi Jahanshahi (hadijahanshahi@gmail.com)
-This is open source code repository for nTreeClus. nTreeClus is an intersection of the conceptions behind existing approaches, including Decision Tree Learning, k-mers, and autoregressive models for categorical time series, culminating with a novel numerical representation of the categorical sequences.
+This is an open source code repository for nTreeClus. nTreeClus is an intersection of the conceptions behind existing approaches, including Decision Tree Learning, k-mers, and autoregressive models for categorical time series, culminating with a novel numerical representation of the categorical sequences.
 
 If using this code or dataset, please cite it.
 
