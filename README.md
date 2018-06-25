@@ -37,7 +37,7 @@ nTreeClus(my_list, n, method = "All", ntree = 10, C)
     **RF**: Random Forest
     
     **All**: both methods (defualt)
-* **ntree**: the number of trees to be used in RF method. The defualt value is 10. (Being too small has a negative effect on accuracy and being too large increases the complexity. So, no less than 5 and no greater than 20.)
+* **ntree**: the number of trees to be used in RF method. The defualt value is 10. (Being too small has a negative effect on accuracy and being too large increases the complexity. So, no less than 5 and no greater than 20 is preferred.)
 * **C**: the number of clusters. If it is not provided, it will be calculated for `C` between 2 to 10.
 
 ### Outputs
