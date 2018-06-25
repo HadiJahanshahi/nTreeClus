@@ -108,7 +108,7 @@ plt.show()
 ![nTreeClus simple example using RF support](https://image.ibb.co/ndD4s8/n_Tree_Clus_HC_RF.png)
 
 
-As the figures demonstrate, the output of RF and DT implementation of nTreeClus is very similar and the method is robust to the selected approach.
+As the figures demonstrate, the output of RF and DT implementation of nTreeClus is very similar and the method is robust to method selection.
 
 **Distance Matrix**
 
