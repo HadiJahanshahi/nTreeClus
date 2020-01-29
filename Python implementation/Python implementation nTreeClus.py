@@ -3,7 +3,7 @@ def nTreeClus(my_list, n = None, method = "All", ntree = 10, C = None):
     The method is suitable for clustering categorical time series (sequences). 
     You can always have access to the examples and description in 
     https://github.com/HadiJahanshahi/nTreeClus
-    If you have any question about the code, you may email hadijahanshahi@gmail.com
+    If you have any question about the code, you may email hadijahanshahi [a t] gmail . com
     
     prerequisites:
         numpy
