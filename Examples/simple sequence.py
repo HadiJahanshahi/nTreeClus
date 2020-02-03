@@ -1,4 +1,4 @@
-#simple example with the output
+#simple example with the output 
 my_list = ['evidence','evident','provide','unconventional','convene']
 nTreeClusModel = nTreeClus(my_list, method = "All")
 
