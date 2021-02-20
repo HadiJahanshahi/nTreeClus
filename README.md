@@ -1,5 +1,5 @@
 # nTreeClus
-## nTreeClus: A NEW METHODOLOGY FOR CLUSTERING CATEGORICAL SEQUENTIAL DATA 
+## nTreeClus: a Tree-based Sequence Encoder for Clustering Categorical Series	
 
 by Hadi Jahanshahi and Mustafa Gökçe Baydoğan 
 
