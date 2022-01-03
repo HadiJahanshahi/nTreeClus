@@ -24,12 +24,12 @@ If using this code or dataset, please cite it.
 
 
 ## Explaining the nTreeClus function
-```
-nTreeClus(my_list, n, method = "All", ntree = 10, C)
+```{python}
+nTreeClus(sequences, n, method = "All", ntree = 10, C)
 ```
 ### Inputs
-* **my_list**: a list of sequences to be clustered
-* **n**: "the window length" or "n" in nTreecluss, you may provide it or it will be calculated automatically if no input has been suggested.
+* **sequences**: a list of sequences to be clustered
+* **n**: "the window length" or "n" in nTreecluss. You may provide it or it will be calculated automatically if no input has been suggested. Currently, the default value of "the square root of average sequences' lengths" is taken.
 * **method**: 
 
     **DT**: Decision Tree
@@ -56,13 +56,14 @@ Assume we are going to compare these words together: `evidence`, `evident`, `pro
 
 **NOTE**: Before using the below code, you shoud call Pythonic function of nTreeClus existing in the folder `Python implementation`.
 
-```
-my_list = ['evidence','evident','provide','unconventional','convene']
-nTreeClusModel = nTreeClus(my_list)
-nTreeClusModel
+```{python}
+sequences = ['evidence','evident','provide','unconventional','convene']
+model     = nTreeClus(sequences, n = None, ntree=5, method = "All")
+model.nTreeClus()
+model.output()
 ```
 **Result**
-```
+``` {python}
 # {'C_DT': 2,
 #  'C_RF': 2,
 #  'Parameter n': 4,
@@ -81,7 +82,7 @@ As the output indicates, the number of optimal clusters `C_DT` and `C_RF` is 2 w
 
 The graphical dendogram of the example clearly shows how the words are related and which ones have the closest similarity.  
 
-```
+``` {python}
 from scipy.cluster.hierarchy import dendrogram, linkage
 from matplotlib import pyplot as plt
 
@@ -96,7 +97,7 @@ plt.show()
 ![nTreeClus simple example using DT support](https://image.ibb.co/gPaZs8/n_Tree_Clus_HC_DT.png)
 
 
-```
+``` {python}
 HC_RF_terminal_cosine = linkage(nTreeClusModel["distance_RF"], 'ward')
 fig = plt.figure(figsize=(25, 10))
 ax = fig.add_subplot(1, 1, 1)
@@ -114,12 +115,12 @@ As the figures demonstrate, the output of RF and DT implementation of nTreeClus 
 
 In order to have distance matrix in a square-form, the below code and scipy library (`scipy.spatial.distance.squareform`) should be used: 
 
-```
+``` {python}
 from scipy.spatial.distance import squareform
 squareform(nTreeClusModel["distance_DT"])
 ```
 *output*
-```
+``` {python}
 # array([[ 0.        ,  0.05508882,  0.43305329,  0.68551455,  0.43305329],
 #        [ 0.05508882,  0.        ,  0.5       ,  0.7226499 ,  0.5       ],
 #        [ 0.43305329,  0.5       ,  0.        ,  0.86132495,  0.75      ],
