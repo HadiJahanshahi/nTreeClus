@@ -12,7 +12,7 @@ from tqdm import tqdm
 
 
 class nTreeClus:
-    def __init__(self, sequences, n, method, ntree=10, C= None):
+    def __init__(self, sequences, n, method, ntree=10, C= None, verbose=1):
         """ nTreeClus is a clustering method by Hadi Jahanshahi and Mustafa Gokce Baydogan.
         The method is suitable for clustering categorical time series (sequences). 
         You can always have access to the examples and description in 
@@ -27,7 +27,7 @@ class nTreeClus:
         
         Args:
             sequences: a list of sequences to be clustered
-            n: "the window length" or "n" in nTreecluss, you may provide it or it will be
+            n: "the window length" or "n" in nTreecluss. You may provide it or it will be
                 calculated automatically if no input has been suggested.
                 Currently, the default value of "the square root of average sequences' lengths" is taken.
             method: 
@@ -38,6 +38,7 @@ class nTreeClus:
                 (Setting a small value decreases accuracy, and a large value may increase the complexity. 
                  no less than 5 and no greater than 20 is recommended.)
             C: number of clusters. If it is not provided, it will be calculated using silhouette_score.
+            verbose [binary]: It indicates whether to print the outputs or not. 
 
         Returns:
             'C_DT': "the optimal number of clusters for Decision Tree",
@@ -77,10 +78,11 @@ class nTreeClus:
         self.assignment_tree_terminal_cosine = None # labels_DT
         self.Dist_RF_terminal_cosine         = None # distance_RF
         self.assignment_RF_terminal_cosine   = None # labels_RF
+        self.verbose                         = verbose
       
     def matrix_segmentation(self):
         seg_mat_list = []
-        for i in tqdm(range(len(self.sequences)), desc="Matrix Segmentation (Splitting based on window size)"):
+        for i in tqdm(range(len(self.sequences)), desc="Matrix Segmentation (Splitting based on window size)", disable=1-self.verbose):
             sentence = self.sequences[i]
             sixgrams = ngrams(list(sentence), self.n)
             for gram in sixgrams:
@@ -94,7 +96,7 @@ class nTreeClus:
         """
         max_clusters = min(11, len(self.sequences))
         ress_sil = []
-        for i in tqdm(range(2, max_clusters), desc="Finding the best number of clusters"):
+        for i in tqdm(range(2, max_clusters), desc=f"Finding the best number of clusters ({which_one})", disable=1-self.verbose):
             assignment_tree_terminal_cosine = cluster.hierarchy.cut_tree(HC_tree_terminal_cosine,i).ravel() #.ravel makes it 1D array.
             ress_sil.append((silhouette_score(ssd.squareform(Dist_tree_terminal_cosine),
                                               assignment_tree_terminal_cosine,metric='cosine').round(3)*1000)/1000)
@@ -106,6 +108,7 @@ class nTreeClus:
     def nTreeClus(self):
         ############# pre processing #################
         if self.n is None:
+            if self.verbose: print("Finding the parameter 'n'")
             min_length = min(map(len, self.sequences))
             total_avg  = round(sum( map(len, self.sequences) ) / len(self.sequences)) # average length of strings
             self.n     = min(round(total_avg**0.5)+1, min_length-1)
@@ -119,11 +122,11 @@ class nTreeClus:
         self.matrix_segmentation()
 
         # dummy variable for DT and RF
+        if self.verbose: print("one-hot encoding + x/y train")
         le                          = preprocessing.LabelEncoder()
         self.seg_mat.loc[:,'Class'] = le.fit_transform(self.seg_mat.loc[:,'Class']) # Convert Y to numbers
         # creating dummy columns for categorical data; one-hot encoding
         self.seg_mat                = pd.get_dummies(self.seg_mat).reset_index(drop=True)
-
         
         xtrain                      = self.seg_mat.drop(labels=['OriginalMAT_element','Class'],axis=1)
         ytrain                      = self.seg_mat['Class']
@@ -131,20 +134,25 @@ class nTreeClus:
         ############# nTreeClus method using DT #################        
         if (self.method == "All") or (self.method == "DT"):
             dtree                                       = DecisionTreeClassifier()
+            if self.verbose: print("Fit DT")
             fitted_tree                                 = dtree.fit(X=xtrain,y=ytrain)
-            predictiontree                              = dtree.predict(xtrain)
             ### finding the terminal nodes.
             terminal_tree                                = fitted_tree.tree_.apply(xtrain.values.astype('float32'))  #terminal output
+            if self.verbose: print("DataFrame of terminal nodes")
             terminal_output_tree                         = pd.DataFrame(terminal_tree)
             terminal_output_tree ['OriginalMAT_element'] = self.seg_mat['OriginalMAT_element'].values
             terminal_output_tree.columns                 = ['ter','OriginalMAT_element']
             terminal_output_tree_F                       = pd.crosstab(terminal_output_tree.OriginalMAT_element, terminal_output_tree.ter)
+            if self.verbose: print("Determining the cosine Distance")
             self.Dist_tree_terminal_cosine               = ssd.pdist(terminal_output_tree_F, metric='cosine')
+            if self.verbose: print("Applying Ward Linkage")
             self.HC_tree_terminal_cosine                 = linkage(self.Dist_tree_terminal_cosine, 'ward')
             #finding the number of clusters
             if self.C_DT is None:
+                if self.verbose: print("Finding the optimal number of clusters")
                 self.finding_the_number_of_clusters(self.HC_tree_terminal_cosine, self.Dist_tree_terminal_cosine, "DT")
             # assigning the correct label
+            if self.verbose: print("Cutting The Tree")
             self.assignment_tree_terminal_cosine = cluster.hierarchy.cut_tree(self.HC_tree_terminal_cosine, self.C_DT).ravel() #.ravel makes it 1D array.
         
             
@@ -152,12 +160,14 @@ class nTreeClus:
         if (self.method == "All") or (self.method == "RF"):
             np.random.seed(123)
             forest               = RandomForestClassifier(n_estimators=self.ntree, max_features=0.36)
+            if self.verbose: print("Fit RF")
             fitted_forest        = forest.fit(X=xtrain, y=ytrain)
             ### Finding Terminal Nodes
             terminal_forest      = fitted_forest.apply(xtrain) #terminal nodes access
             terminal_forest      = pd.DataFrame(terminal_forest)
             #Adding "columnindex_" to the beginning of all  
             terminal_forest      = terminal_forest.astype('str')
+            if self.verbose: print("DataFrame of terminal nodes")
             for col in terminal_forest:
                 terminal_forest[col] = '{}_'.format(col) + terminal_forest[col]
             terminal_forest.head()
@@ -168,15 +178,18 @@ class nTreeClus:
                 else:
                     temp                  = pd.concat([self.seg_mat['OriginalMAT_element'], terminal_forest[i]], ignore_index=True, axis=1)
                     rbind_terminal_forest = pd.concat([rbind_terminal_forest, temp], ignore_index=True)
-
             rbind_terminal_forest.columns = ['OriginalMAT_element','ter']
             terminal_output_forest_F      = pd.crosstab(rbind_terminal_forest.OriginalMAT_element, rbind_terminal_forest.ter)
+            if self.verbose: print("Determining the cosine Distance")            
             self.Dist_RF_terminal_cosine  = ssd.pdist(terminal_output_forest_F, metric='cosine')
+            if self.verbose: print("Applying Ward Linkage")
             self.HC_RF_terminal_cosine    = linkage(self.Dist_RF_terminal_cosine, 'ward')
             #finding the number of clusters
             if self.C_RF is None:
+                if self.verbose: print("Finding the optimal number of clusters")
                 self.finding_the_number_of_clusters(self.HC_RF_terminal_cosine, self.Dist_RF_terminal_cosine, "RF")
             # assigning the correct label
+            if self.verbose: print("Cutting The Tree")
             self.assignment_RF_terminal_cosine = cluster.hierarchy.cut_tree(self.HC_RF_terminal_cosine, self.C_RF).ravel() #.ravel makes it 1D array.
 
     def output(self):
