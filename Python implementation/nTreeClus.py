@@ -4,9 +4,12 @@ import scipy.spatial.distance as ssd
 from nltk import ngrams
 from scipy import cluster
 from scipy.cluster.hierarchy import linkage
+from scipy.sparse import csr_matrix
+from scipy.spatial.distance import squareform
 from sklearn import preprocessing
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import silhouette_score
+from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.tree import DecisionTreeClassifier
 from tqdm import tqdm
 
@@ -133,18 +136,21 @@ class nTreeClus:
 
         ############# nTreeClus method using DT #################        
         if (self.method == "All") or (self.method == "DT"):
-            dtree                                       = DecisionTreeClassifier()
+            dtree                                        = DecisionTreeClassifier()
             if self.verbose: print("Fit DT")
-            fitted_tree                                 = dtree.fit(X=xtrain,y=ytrain)
+            fitted_tree                                  = dtree.fit(X=xtrain,y=ytrain)
             ### finding the terminal nodes.
             terminal_tree                                = fitted_tree.tree_.apply(xtrain.values.astype('float32'))  #terminal output
             if self.verbose: print("DataFrame of terminal nodes")
             terminal_output_tree                         = pd.DataFrame(terminal_tree)
             terminal_output_tree ['OriginalMAT_element'] = self.seg_mat['OriginalMAT_element'].values
             terminal_output_tree.columns                 = ['ter','OriginalMAT_element']
-            terminal_output_tree_F                       = pd.crosstab(terminal_output_tree.OriginalMAT_element, terminal_output_tree.ter)
+            i, r                                         = pd.factorize(terminal_output_tree['OriginalMAT_element'])
+            j, c                                         = pd.factorize(terminal_output_tree['ter'])
+            ij, tups                                     = pd.factorize(list(zip(i, j)))
+            terminal_output_tree_F                       = csr_matrix((np.bincount(ij), tuple(zip(*tups))))
             if self.verbose: print("Determining the cosine Distance")
-            self.Dist_tree_terminal_cosine               = ssd.pdist(terminal_output_tree_F, metric='cosine')
+            self.Dist_tree_terminal_cosine               = squareform(np.round(1-cosine_similarity(terminal_output_tree_F),8))
             if self.verbose: print("Applying Ward Linkage")
             self.HC_tree_terminal_cosine                 = linkage(self.Dist_tree_terminal_cosine, 'ward')
             #finding the number of clusters
@@ -179,9 +185,14 @@ class nTreeClus:
                     temp                  = pd.concat([self.seg_mat['OriginalMAT_element'], terminal_forest[i]], ignore_index=True, axis=1)
                     rbind_terminal_forest = pd.concat([rbind_terminal_forest, temp], ignore_index=True)
             rbind_terminal_forest.columns = ['OriginalMAT_element','ter']
-            terminal_output_forest_F      = pd.crosstab(rbind_terminal_forest.OriginalMAT_element, rbind_terminal_forest.ter)
-            if self.verbose: print("Determining the cosine Distance")            
-            self.Dist_RF_terminal_cosine  = ssd.pdist(terminal_output_forest_F, metric='cosine')
+            i, r                          = pd.factorize(rbind_terminal_forest['OriginalMAT_element'])
+            j, c                          = pd.factorize(rbind_terminal_forest['ter'])
+            ij, tups                      = pd.factorize(list(zip(i, j)))
+            terminal_output_forest_F      = csr_matrix((np.bincount(ij), tuple(zip(*tups))))
+            # terminal_output_forest_F      = pd.crosstab(rbind_terminal_forest.OriginalMAT_element, rbind_terminal_forest.ter)
+            if self.verbose: print("Determining the cosine Distance")
+            self.Dist_RF_terminal_cosine  = squareform(np.round(1-cosine_similarity(terminal_output_forest_F),8))
+            # self.Dist_RF_terminal_cosine  = ssd.pdist(terminal_output_forest_F, metric='cosine')
             if self.verbose: print("Applying Ward Linkage")
             self.HC_RF_terminal_cosine    = linkage(self.Dist_RF_terminal_cosine, 'ward')
             #finding the number of clusters
