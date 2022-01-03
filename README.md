@@ -25,7 +25,7 @@ If using this code or dataset, please cite it.
 
 ## Explaining the nTreeClus function
 ```{python}
-nTreeClus(sequences, n, method = "All", ntree = 10, C)
+nTreeClus(sequences, n, method = "All", ntree = 10, C= None, verbose=1)
 ```
 ### Inputs
 * **sequences**: a list of sequences to be clustered
@@ -39,6 +39,7 @@ nTreeClus(sequences, n, method = "All", ntree = 10, C)
     **All**: both methods (default)
 * **ntree**: the number of trees to be used in the RF method. The default value is 10. (Setting a small value decreases accuracy, and a large value may increase the complexity. No less than 5 and no greater than 20 is recommended.)
 * **C**: the number of clusters. If it is not provided, it will be calculated for `C` between 2 to 10.
+* **verbose [binary]**: It indicates whether to print the outputs or not. 
 
 ### Outputs
 * **C_DT**: "the optimal number of clusters for Decision Tree",
@@ -58,7 +59,7 @@ Assume we are going to compare these words together: `evidence`, `evident`, `pro
 
 ```{python}
 sequences = ['evidence','evident','provide','unconventional','convene']
-model     = nTreeClus(sequences, n = None, ntree=5, method = "All")
+model     = nTreeClus(sequences, n = None, ntree=5, method = "All", verbose=0)
 model.nTreeClus()
 print(model.output())
 ```
