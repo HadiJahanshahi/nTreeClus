@@ -60,7 +60,7 @@ Assume we are going to compare these words together: `evidence`, `evident`, `pro
 sequences = ['evidence','evident','provide','unconventional','convene']
 model     = nTreeClus(sequences, n = None, ntree=5, method = "All")
 model.nTreeClus()
-model.output()
+print(model.output())
 ```
 **Result**
 ``` {python}
