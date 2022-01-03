@@ -11,7 +11,7 @@ by Hadi Jahanshahi and Mustafa Gökçe Baydoğan
 
 
 #### Maintained by: Hadi Jahanshahi (hadijahanshahi@gmail.com)
-This is an open source code repository for nTreeClus. nTreeClus is an intersection of the conceptions behind existing approaches, including Decision Tree Learning, k-mers, and autoregressive models for categorical time series, culminating with a novel numerical representation of the categorical sequences.
+This is an open-source code repository for nTreeClus. nTreeClus is an intersection of the conceptions behind existing approaches, including Decision Tree Learning, k-mers, and autoregressive models for categorical time series, culminating with a novel numerical representation of the categorical sequences.
 
 If using this code or dataset, please cite it.
 
@@ -36,25 +36,25 @@ nTreeClus(sequences, n, method = "All", ntree = 10, C)
     
     **RF**: Random Forest
     
-    **All**: both methods (defualt)
-* **ntree**: the number of trees to be used in RF method. The defualt value is 10. (Being too small has a negative effect on accuracy and being too large increases the complexity. So, no less than 5 and no greater than 20 is preferred.)
+    **All**: both methods (default)
+* **ntree**: the number of trees to be used in the RF method. The default value is 10. (Setting a small value decreases accuracy, and a large value may increase the complexity. No less than 5 and no greater than 20 is recommended.)
 * **C**: the number of clusters. If it is not provided, it will be calculated for `C` between 2 to 10.
 
 ### Outputs
-* **C_DT**: "the optimal number of clusters with the aid of Decision Tree",
-* **C_RF**: "the optimal number of clusters with the aid of Random Forest",
-* **'Parameter n'**: the parameter of the nTreeClus (n) - either calculated or manually given
-* **distance_DT**: "sparse disance between sequences with the aid of Decision Tree",
-* **distance_RF**: "sparse disance between sequences with the aid of Random Forest",
-* **labels_DT**: "labels based on the optimal number of clusters using DT",
-* **labels_RF**: "labels based on the optimal number of clusters using RF".
+* **C_DT**: "the optimal number of clusters for Decision Tree",
+* **C_RF**: "the optimal number of clusters for Random Forest",
+* **'Parameter n'**: the parameter of the nTreeClus (n) -- either calculated or manually entered
+* **distance_DT**: "sparse distance between sequences for Decision Tree",
+* **distance_RF**: "sparse distance between sequences for Random Forest",
+* **labels_DT**: "labels based on the optimal number of clusters for DT",
+* **labels_RF**: "labels based on the optimal number of clusters for RF",
 
 
 
 ## Quick validation of the code
-Assume we are going to compare these words together: `evidence`, `evident`, `provide`, `unconventional`, and `convene`. Probably the first three having the same root `vid` (see) should be in the same cluster and the last two words having the prefix `con` (together)  and the root `ven` (come) should be clustered as another cluster. We test it using nTreeClus. 
+Assume we are going to compare these words together: `evidence`, `evident`, `provide`, `unconventional`, and `convene`. We expect to see the first three words in the same cluster, knowing they have the same root `vid` (see). The last two words, having the prefix `con` (together) and the root `ven` (come), are expected to be clustered separately. We test it using nTreeClus. 
 
-**NOTE**: Before using the below code, you shoud call Pythonic function of nTreeClus existing in the folder `Python implementation`.
+**NOTE**: Before using the below code, you should import the nTreeClus class from the folder `Python implementation`.
 
 ```{python}
 sequences = ['evidence','evident','provide','unconventional','convene']
@@ -75,12 +75,12 @@ print(model.output())
 #  'labels_RF': array([0, 0, 0, 1, 1])}
 ```
 
-As the output indicates, the number of optimal clusters `C_DT` and `C_RF` is 2 whether Decision Tree or Random Forest is used. Furthermore, the correct label for both methods is `[0, 0, 0, 1, 1]` indicating the first three are from cluster 0 and the last two items are from cluster 1. The result is consistent with our pre-knowledge about the data. The parameter *n* or windows size is calculated and is 4 in this case.
+As the output indicates, the number of optimal clusters `C_DT` and `C_RF` is 2 whether Decision Tree or Random Forest is used. Furthermore, the correct label for both methods is `[0, 0, 0, 1, 1]` indicating the first three are from cluster 0, and the last two items are from cluster 1. The result is consistent with our pre-knowledge about the data. The parameter `n` or windows size is calculated and is 4 in this case.
 
 
 **Graphical Output**
 
-The graphical dendogram of the example clearly shows how the words are related and which ones have the closest similarity.  
+The graphical dendrogram of the example shows how the words are related and which ones have the closest similarity.  
 
 ``` {python}
 from scipy.cluster.hierarchy import dendrogram, linkage
@@ -109,11 +109,11 @@ plt.show()
 ![nTreeClus simple example using RF support](https://image.ibb.co/ndD4s8/n_Tree_Clus_HC_RF.png)
 
 
-As the figures demonstrate, the output of RF and DT implementation of nTreeClus is very similar and the method is robust to method selection.
+As the figures demonstrate, the output of RF and DT implementation of nTreeClus is very similar, and the method is robust to method selection.
 
 **Distance Matrix**
 
-In order to have distance matrix in a square-form, the below code and scipy library (`scipy.spatial.distance.squareform`) should be used: 
+In order to have a distance matrix in a square-form, the below code of the scipy library (`scipy.spatial.distance.squareform`) should be used: 
 
 ``` {python}
 from scipy.spatial.distance import squareform
