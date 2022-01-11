@@ -17,10 +17,13 @@ If using this code or dataset, please cite it.
 
 
 ## Prerequisite libraries
+* Python 3.6+
 * numpy
 * pandas
 * sklearn
 * scipy
+* nltk
+* tqdm
 
 
 ## Explaining the nTreeClus function
