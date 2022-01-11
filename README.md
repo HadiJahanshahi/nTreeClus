@@ -17,7 +17,7 @@ If using this code or dataset, please cite it.
 
 
 ## Prerequisite libraries
-* Python 3.6+
+* Python 3.6.0+
 * numpy 1.19.2
 * pandas 1.1.2
 * sklearn 0.24.1
