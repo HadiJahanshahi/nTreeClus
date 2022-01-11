@@ -18,12 +18,12 @@ If using this code or dataset, please cite it.
 
 ## Prerequisite libraries
 * Python 3.6+
-* numpy
-* pandas
-* sklearn
-* scipy
-* nltk
-* tqdm
+* numpy 1.19.2
+* pandas 1.1.2
+* sklearn 0.24.1
+* scipy 1.6.1
+* nltk 3.6.2
+* tqdm 4.40.0
 
 
 ## Explaining the nTreeClus function
