@@ -302,3 +302,7 @@ class nTreeClus:
             self.res.loc['RF',"Sil"] = math.ceil(silhouette_score(ssd.squareform(self.Dist_RF_terminal_cosine),
                                                              self.assignment_tree_terminal_cosine,metric='cosine').round(3)*1000)/1000
         return self.res
+    
+    def __version__(self):
+        print('1.1.0')
+        
