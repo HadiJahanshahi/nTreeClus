@@ -17,10 +17,13 @@ If using this code or dataset, please cite it.
 
 
 ## Prerequisite libraries
-* numpy
-* pandas
-* sklearn
-* scipy
+* Python 3.6.0+
+* numpy 1.19.2
+* pandas 1.1.2
+* sklearn 0.24.1
+* scipy 1.6.1
+* nltk 3.6.2
+* tqdm 4.40.0
 
 
 ## Explaining the nTreeClus function
@@ -29,7 +32,7 @@ nTreeClus(sequences, n, method = "All", ntree = 10, C= None, verbose=1)
 ```
 ### Inputs
 * **sequences**: a list of sequences to be clustered
-* **n**: "the window length" or "n" in nTreecluss. You may provide it or it will be calculated automatically if no input has been suggested. Currently, the default value of "the square root of average sequences' lengths" is taken.
+* **n**: "the window length" or "n" in nTreeclus. You may provide it or it will be calculated automatically if no input has been suggested. Currently, the default value of "the square root of average sequences' lengths" is taken.
 * **method**: 
 
     **DT**: Decision Tree
@@ -44,11 +47,12 @@ nTreeClus(sequences, n, method = "All", ntree = 10, C= None, verbose=1)
 ### Outputs
 * **C_DT**: "the optimal number of clusters for Decision Tree",
 * **C_RF**: "the optimal number of clusters for Random Forest",
-* **'Parameter n'**: the parameter of the nTreeClus (n) -- either calculated or manually entered
+* **Parameter n**: the parameter of the nTreeClus (n) -- either calculated or manually entered
 * **distance_DT**: "sparse distance between sequences for Decision Tree",
 * **distance_RF**: "sparse distance between sequences for Random Forest",
 * **labels_DT**: "labels based on the optimal number of clusters for DT",
 * **labels_RF**: "labels based on the optimal number of clusters for RF",
+* **res**: "The result table for the performance of the algorithm. It will be shown if the method `performance` is run.",
 
 
 
