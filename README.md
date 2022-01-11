@@ -49,7 +49,7 @@ nTreeClus(sequences, n, method = "All", ntree = 10, C= None, verbose=1)
 * **distance_RF**: "sparse distance between sequences for Random Forest",
 * **labels_DT**: "labels based on the optimal number of clusters for DT",
 * **labels_RF**: "labels based on the optimal number of clusters for RF",
-* **res**: "The result table for the perfomance of the algorith. It will be shown if the method `performance` is run.",
+* **res**: "The result table for the performance of the algorithm. It will be shown if the method `performance` is run.",
 
 
 
