@@ -35,11 +35,15 @@ nTreeClus(sequences, n, method = "All", ntree = 10, C= None, verbose=1)
 * **n**: "the window length" or "n" in nTreeclus. You may provide it or it will be calculated automatically if no input has been suggested. Currently, the default value of "the square root of average sequences' lengths" is taken.
 * **method**: 
 
-    **DT**: Decision Tree
+    **DT**:          Decision Tree
+
+    **DT_position**: Decision Tree with position indexes
     
-    **RF**: Random Forest
+    **RF**:          Random Forest
+
+    **RF_position**: Random Forest with position indexes
     
-    **All**: both methods (default)
+    **All**: all methods (default)
 * **ntree**: the number of trees to be used in the RF method. The default value is 10. (Setting a small value decreases accuracy, and a large value may increase the complexity. No less than 5 and no greater than 20 is recommended.)
 * **C**: the number of clusters. If it is not provided, it will be calculated for `C` between 2 to 10.
 * **verbose [binary]**: It indicates whether to print the outputs or not. 
