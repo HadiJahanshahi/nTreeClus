@@ -1,4 +1,5 @@
 import math
+import time
 
 import numpy as np
 import pandas as pd
@@ -96,6 +97,11 @@ class nTreeClus:
         self.Dist_RF_terminal_cosine_p         = None # distance_RF + position
         self.assignment_RF_terminal_cosine_p   = None # labels_RF   + position
         self.verbose                           = verbose
+        self.running_timeSegmentation          = None
+        self.running_timeDT                    = None
+        self.running_timeDT_p                  = None
+        self.running_timeRF                    = None
+        self.running_timeRF_p                  = None
     
     @staticmethod
     def purity_score(clusters, classes):
@@ -192,20 +198,23 @@ class nTreeClus:
                                 Remove the sequences with the length shorter than 3 and then re-run the function.""")
         
         ############# matrix segmentation #################
+        start_time                    = time.time()
         self.matrix_segmentation()
+        self.running_timeSegmentation = round(time.time() - start_time)
 
         # dummy variable for DT and RF
         if self.verbose: print("one-hot encoding + x/y train")
-        le                          = preprocessing.LabelEncoder()
-        self.seg_mat.loc[:,'Class'] = le.fit_transform(self.seg_mat.loc[:,'Class']) # Convert Y to numbers
+        le                            = preprocessing.LabelEncoder()
+        self.seg_mat.loc[:,'Class']   = le.fit_transform(self.seg_mat.loc[:,'Class']) # Convert Y to numbers
         # creating dummy columns for categorical data; one-hot encoding
-        self.seg_mat                = pd.get_dummies(self.seg_mat).reset_index(drop=True)
+        self.seg_mat                  = pd.get_dummies(self.seg_mat).reset_index(drop=True)
         
         ############# nTreeClus method using DT #################        
         if (self.method in ["All","DT"]):
-            xtrain                      = self.seg_mat.drop(labels=['OriginalMAT_element', 'Position', 'Class'],
-                                                            axis=1).copy()
-            ytrain                      = self.seg_mat['Class'].copy()
+            start_time                                   = time.time()
+            xtrain                                       = self.seg_mat.drop(labels=['OriginalMAT_element', 'Position', 'Class'],
+                                                                             axis=1).copy()
+            ytrain                                       = self.seg_mat['Class'].copy()
             dtree                                        = DecisionTreeClassifier()
             if self.verbose: print("Fit DT")
             fitted_tree                                  = dtree.fit(X=xtrain,y=ytrain)
@@ -233,12 +242,14 @@ class nTreeClus:
             if self.verbose: print("Cutting The Tree")
             self.assignment_tree_terminal_cosine = cluster.hierarchy.cut_tree(self.HC_tree_terminal_cosine, 
                                                                               self.C_DT).ravel() #.ravel makes it 1D array.
+            self.running_timeDT                          = round(time.time() - start_time)
             
         ############# nTreeClus method using DT + Position #################        
         if (self.method in ["All","DT_position"]):
-            xtrain                      = self.seg_mat.drop(labels=['OriginalMAT_element', 'Class'],
-                                                            axis=1).copy()
-            ytrain                      = self.seg_mat['Class'].copy()
+            start_time                                   = time.time()
+            xtrain                                       = self.seg_mat.drop(labels=['OriginalMAT_element', 'Class'],
+                                                                             axis=1).copy()
+            ytrain                                       = self.seg_mat['Class'].copy()
             dtree                                        = DecisionTreeClassifier()
             if self.verbose: print("Fit DT + POSITION")
             fitted_tree                                  = dtree.fit(X=xtrain,y=ytrain)
@@ -266,21 +277,23 @@ class nTreeClus:
             if self.verbose: print("Cutting The Tree")
             self.assignment_tree_terminal_cosine_p = cluster.hierarchy.cut_tree(self.HC_tree_terminal_cosine_p,
                                                                                 self.C_DT_p).ravel() #.ravel makes it 1D array.
+            self.running_timeDT_p                          = round(time.time() - start_time)
             
         ############# nTreeClus method using RF #################
         if (self.method in ["All","RF"]):
-            xtrain                      = self.seg_mat.drop(labels=['OriginalMAT_element', 'Position', 'Class'],
-                                                            axis=1).copy()
-            ytrain                      = self.seg_mat['Class'].copy()
+            start_time                                     = time.time()
+            xtrain                                         = self.seg_mat.drop(labels=['OriginalMAT_element', 'Position', 'Class'],
+                                                                               axis=1).copy()
+            ytrain                                         = self.seg_mat['Class'].copy()
             np.random.seed(123)
-            forest               = RandomForestClassifier(n_estimators=self.ntree, max_features=0.36)
+            forest                                         = RandomForestClassifier(n_estimators=self.ntree, max_features=0.36)
             if self.verbose: print("Fit RF")
-            fitted_forest        = forest.fit(X=xtrain, y=ytrain)
+            fitted_forest                                  = forest.fit(X=xtrain, y=ytrain)
             ### Finding Terminal Nodes
-            terminal_forest      = fitted_forest.apply(xtrain) #terminal nodes access
-            terminal_forest      = pd.DataFrame(terminal_forest)
+            terminal_forest                                = fitted_forest.apply(xtrain) #terminal nodes access
+            terminal_forest                                = pd.DataFrame(terminal_forest)
             #Adding "columnindex_" to the beginning of all  
-            terminal_forest      = terminal_forest.astype('str')
+            terminal_forest                                = terminal_forest.astype('str')
             if self.verbose: print("DataFrame of terminal nodes")
             for col in terminal_forest:
                 terminal_forest[col] = '{}_'.format(col) + terminal_forest[col]
@@ -294,17 +307,15 @@ class nTreeClus:
                     temp                  = pd.concat([self.seg_mat['OriginalMAT_element'], 
                                                        terminal_forest[i]], ignore_index=True, axis=1)
                     rbind_terminal_forest = pd.concat([rbind_terminal_forest, temp], ignore_index=True)
-            rbind_terminal_forest.columns = ['OriginalMAT_element','ter']
-            i, r                          = pd.factorize(rbind_terminal_forest['OriginalMAT_element'])
-            j, c                          = pd.factorize(rbind_terminal_forest['ter'])
-            ij, tups                      = pd.factorize(list(zip(i, j)))
-            terminal_output_forest_F      = csr_matrix((np.bincount(ij), tuple(zip(*tups))))
-            # terminal_output_forest_F      = pd.crosstab(rbind_terminal_forest.OriginalMAT_element, rbind_terminal_forest.ter)
+            rbind_terminal_forest.columns                 = ['OriginalMAT_element','ter']
+            i, r                                          = pd.factorize(rbind_terminal_forest['OriginalMAT_element'])
+            j, c                                          = pd.factorize(rbind_terminal_forest['ter'])
+            ij, tups                                      = pd.factorize(list(zip(i, j)))
+            terminal_output_forest_F                      = csr_matrix((np.bincount(ij), tuple(zip(*tups))))
             if self.verbose: print("Determining the cosine Distance")
-            self.Dist_RF_terminal_cosine  = squareform(np.round(1-cosine_similarity(terminal_output_forest_F),8))
-            # self.Dist_RF_terminal_cosine  = ssd.pdist(terminal_output_forest_F, metric='cosine')
+            self.Dist_RF_terminal_cosine                  = squareform(np.round(1-cosine_similarity(terminal_output_forest_F),8))
             if self.verbose: print("Applying Ward Linkage")
-            self.HC_RF_terminal_cosine    = linkage(self.Dist_RF_terminal_cosine, 'ward')
+            self.HC_RF_terminal_cosine                    = linkage(self.Dist_RF_terminal_cosine, 'ward')
             #finding the number of clusters
             if self.C_RF is None:
                 if self.verbose: print("Finding the optimal number of clusters")
@@ -312,23 +323,25 @@ class nTreeClus:
                                                     self.Dist_RF_terminal_cosine, "RF")
             # assigning the correct label
             if self.verbose: print("Cutting The Tree")
-            self.assignment_RF_terminal_cosine = cluster.hierarchy.cut_tree(self.HC_RF_terminal_cosine, 
-                                                                            self.C_RF).ravel() #.ravel makes it 1D array.
-
+            self.assignment_RF_terminal_cosine            = cluster.hierarchy.cut_tree(self.HC_RF_terminal_cosine,
+                                                                                       self.C_RF).ravel() #.ravel makes it 1D array.
+            self.running_timeRF                           = round(time.time() - start_time)
+            
         ############# nTreeClus method using RF + position #################
         if (self.method in ["All","RF_position"]):
-            xtrain                      = self.seg_mat.drop(labels=['OriginalMAT_element', 'Class'],
-                                                            axis=1).copy()
-            ytrain                      = self.seg_mat['Class'].copy()
+            start_time                                     = time.time()
+            xtrain                                         = self.seg_mat.drop(labels=['OriginalMAT_element', 'Class'],
+                                                                            axis=1).copy()
+            ytrain                                         = self.seg_mat['Class'].copy()
             np.random.seed(123)
-            forest               = RandomForestClassifier(n_estimators=self.ntree, max_features=0.36)
+            forest                                         = RandomForestClassifier(n_estimators=self.ntree, max_features=0.36)
             if self.verbose: print("Fit RF + POSITION")
-            fitted_forest        = forest.fit(X=xtrain, y=ytrain)
+            fitted_forest                                  = forest.fit(X=xtrain, y=ytrain)
             ### Finding Terminal Nodes
-            terminal_forest      = fitted_forest.apply(xtrain) #terminal nodes access
-            terminal_forest      = pd.DataFrame(terminal_forest)
+            terminal_forest                                = fitted_forest.apply(xtrain) #terminal nodes access
+            terminal_forest                                = pd.DataFrame(terminal_forest)
             #Adding "columnindex_" to the beginning of all  
-            terminal_forest      = terminal_forest.astype('str')
+            terminal_forest                                = terminal_forest.astype('str')
             if self.verbose: print("DataFrame of terminal nodes")
             for col in terminal_forest:
                 terminal_forest[col] = '{}_'.format(col) + terminal_forest[col]
@@ -342,17 +355,15 @@ class nTreeClus:
                     temp                  = pd.concat([self.seg_mat['OriginalMAT_element'], 
                                                        terminal_forest[i]], ignore_index=True, axis=1)
                     rbind_terminal_forest = pd.concat([rbind_terminal_forest, temp], ignore_index=True)
-            rbind_terminal_forest.columns = ['OriginalMAT_element','ter']
-            i, r                          = pd.factorize(rbind_terminal_forest['OriginalMAT_element'])
-            j, c                          = pd.factorize(rbind_terminal_forest['ter'])
-            ij, tups                      = pd.factorize(list(zip(i, j)))
-            terminal_output_forest_F      = csr_matrix((np.bincount(ij), tuple(zip(*tups))))
-            # terminal_output_forest_F      = pd.crosstab(rbind_terminal_forest.OriginalMAT_element, rbind_terminal_forest.ter)
+            rbind_terminal_forest.columns                 = ['OriginalMAT_element','ter']
+            i, r                                          = pd.factorize(rbind_terminal_forest['OriginalMAT_element'])
+            j, c                                          = pd.factorize(rbind_terminal_forest['ter'])
+            ij, tups                                      = pd.factorize(list(zip(i, j)))
+            terminal_output_forest_F                      = csr_matrix((np.bincount(ij), tuple(zip(*tups))))
             if self.verbose: print("Determining the cosine Distance")
-            self.Dist_RF_terminal_cosine_p  = squareform(np.round(1-cosine_similarity(terminal_output_forest_F),8))
-            # self.Dist_RF_terminal_cosine  = ssd.pdist(terminal_output_forest_F, metric='cosine')
+            self.Dist_RF_terminal_cosine_p                = squareform(np.round(1-cosine_similarity(terminal_output_forest_F),8))
             if self.verbose: print("Applying Ward Linkage")
-            self.HC_RF_terminal_cosine_p    = linkage(self.Dist_RF_terminal_cosine_p, 'ward')
+            self.HC_RF_terminal_cosine_p                  = linkage(self.Dist_RF_terminal_cosine_p, 'ward')
             #finding the number of clusters
             if self.C_RF_p is None:
                 if self.verbose: print("Finding the optimal number of clusters")
@@ -360,8 +371,9 @@ class nTreeClus:
                                                     self.Dist_RF_terminal_cosine_p, "RF_position")
             # assigning the correct label
             if self.verbose: print("Cutting The Tree")
-            self.assignment_RF_terminal_cosine_p = cluster.hierarchy.cut_tree(self.HC_RF_terminal_cosine_p, 
-                                                                            self.C_RF_p).ravel() #.ravel makes it 1D array.
+            self.assignment_RF_terminal_cosine_p          = cluster.hierarchy.cut_tree(self.HC_RF_terminal_cosine_p, 
+                                                                                       self.C_RF_p).ravel() #.ravel makes it 1D array.
+            self.running_timeRF_p                         = round(time.time() - start_time)
 
     def output(self):
         return {"C_DT":self.C_DT, "distance_DT":self.Dist_tree_terminal_cosine, 
@@ -371,7 +383,11 @@ class nTreeClus:
                 "C_DT_p":self.C_DT_p, "distance_DT_p":self.Dist_tree_terminal_cosine_p, 
                 "labels_DT_p":self.assignment_tree_terminal_cosine_p, 
                 "C_RF_p":self.C_RF_p, "distance_RF_p":self.Dist_RF_terminal_cosine_p, 
-                "labels_RF_p":self.assignment_RF_terminal_cosine_p, "Parameter n":self.n}
+                "labels_RF_p":self.assignment_RF_terminal_cosine_p, 
+                "running_timeSegmentation": self.running_timeSegmentation, 
+                "running_timeDT": self.running_timeDT, "running_timeDT_p": self.running_timeDT_p,
+                "running_timeRF": self.running_timeRF, "running_timeRF_p": self.running_timeRF_p,
+                "Parameter n":self.n}
         
     def performance(self, Ground_Truth):
         """[Reporting the performance]
@@ -384,13 +400,13 @@ class nTreeClus:
         """
         self.res = pd.DataFrame()
         if (self.method in ["All","DT"]):
-            predictions_DT = pd.DataFrame({'labels':Ground_Truth, "labels_DT":self.assignment_tree_terminal_cosine})
+            predictions_DT           = pd.DataFrame({'labels':Ground_Truth, "labels_DT":self.assignment_tree_terminal_cosine})
             replacement = {}
             for i in predictions_DT.labels_DT.unique():
                 replacement[i] = ((predictions_DT[predictions_DT.labels_DT == i].labels.mode()[0]))
             predictions_DT.labels_DT = predictions_DT.labels_DT.map(replacement)
-            self.res.loc['DT',"F1S"] = max(score(Ground_Truth, self.assignment_tree_terminal_cosine, average='macro')[2], 
-                                    score(Ground_Truth, predictions_DT.labels_DT, average='macro')[2]).round(3)
+            self.res.loc['DT',"F1S"] = max(score(Ground_Truth, self.assignment_tree_terminal_cosine, average='macro',zero_division=0)[2], 
+                                    score(Ground_Truth, predictions_DT.labels_DT, average='macro',zero_division=0)[2]).round(3)
             self.res.loc['DT',"ARS"] = math.ceil((adjusted_rand_score(Ground_Truth, self.assignment_tree_terminal_cosine))*1000)/1000
             self.res.loc['DT',"RS"]  = math.ceil((self.rand_index_score(Ground_Truth, self.assignment_tree_terminal_cosine))*1000)/1000
             self.res.loc['DT',"Pur"] = math.ceil((self.purity_score(Ground_Truth, self.assignment_tree_terminal_cosine))*1000)/1000
@@ -404,8 +420,8 @@ class nTreeClus:
             for i in predictions_RF.labels_RF.unique():
                 replacement[i] = ((predictions_RF[predictions_RF.labels_RF == i].labels.mode()[0]))
             predictions_RF.labels_RF = predictions_RF.labels_RF.map(replacement)
-            self.res.loc['RF',"F1S"] = max(score(Ground_Truth, self.assignment_RF_terminal_cosine, average='macro')[2], 
-                                      score(Ground_Truth, predictions_RF.labels_RF, average='macro')[2]).round(3)
+            self.res.loc['RF',"F1S"] = max(score(Ground_Truth, self.assignment_RF_terminal_cosine, average='macro',zero_division=0)[2], 
+                                      score(Ground_Truth, predictions_RF.labels_RF, average='macro',zero_division=0)[2]).round(3)
             self.res.loc['RF',"ARS"] = math.ceil((adjusted_rand_score(Ground_Truth, self.assignment_RF_terminal_cosine))*1000)/1000
             self.res.loc['RF',"RS"]  = math.ceil((self.rand_index_score(Ground_Truth, self.assignment_RF_terminal_cosine))*1000)/1000
             self.res.loc['RF',"Pur"] = math.ceil((self.purity_score(Ground_Truth, self.assignment_RF_terminal_cosine))*1000)/1000
@@ -418,8 +434,8 @@ class nTreeClus:
             for i in predictions_DT.labels_DT.unique():
                 replacement[i] = ((predictions_DT[predictions_DT.labels_DT == i].labels.mode()[0]))
             predictions_DT.labels_DT = predictions_DT.labels_DT.map(replacement)
-            self.res.loc['DT_p',"F1S"] = max(score(Ground_Truth, self.assignment_tree_terminal_cosine_p, average='macro')[2], 
-                                    score(Ground_Truth, predictions_DT.labels_DT, average='macro')[2]).round(3)
+            self.res.loc['DT_p',"F1S"] = max(score(Ground_Truth, self.assignment_tree_terminal_cosine_p, average='macro',zero_division=0)[2], 
+                                    score(Ground_Truth, predictions_DT.labels_DT, average='macro',zero_division=0)[2]).round(3)
             self.res.loc['DT_p',"ARS"] = math.ceil((adjusted_rand_score(Ground_Truth, self.assignment_tree_terminal_cosine_p))*1000)/1000
             self.res.loc['DT_p',"RS"]  = math.ceil((self.rand_index_score(Ground_Truth, self.assignment_tree_terminal_cosine_p))*1000)/1000
             self.res.loc['DT_p',"Pur"] = math.ceil((self.purity_score(Ground_Truth, self.assignment_tree_terminal_cosine_p))*1000)/1000
@@ -433,8 +449,8 @@ class nTreeClus:
             for i in predictions_RF.labels_RF.unique():
                 replacement[i] = ((predictions_RF[predictions_RF.labels_RF == i].labels.mode()[0]))
             predictions_RF.labels_RF = predictions_RF.labels_RF.map(replacement)
-            self.res.loc['RF_p',"F1S"] = max(score(Ground_Truth, self.assignment_RF_terminal_cosine_p, average='macro')[2], 
-                                      score(Ground_Truth, predictions_RF.labels_RF, average='macro')[2]).round(3)
+            self.res.loc['RF_p',"F1S"] = max(score(Ground_Truth, self.assignment_RF_terminal_cosine_p, average='macro',zero_division=0)[2], 
+                                      score(Ground_Truth, predictions_RF.labels_RF, average='macro',zero_division=0)[2]).round(3)
             self.res.loc['RF_p',"ARS"] = math.ceil((adjusted_rand_score(Ground_Truth, self.assignment_RF_terminal_cosine_p))*1000)/1000
             self.res.loc['RF_p',"RS"]  = math.ceil((self.rand_index_score(Ground_Truth, self.assignment_RF_terminal_cosine_p))*1000)/1000
             self.res.loc['RF_p',"Pur"] = math.ceil((self.purity_score(Ground_Truth, self.assignment_RF_terminal_cosine_p))*1000)/1000
@@ -443,7 +459,7 @@ class nTreeClus:
             self.res.loc['RF_p',"1NN"] = math.ceil((self._1nn(Ground_Truth, self.Dist_RF_terminal_cosine_p))*1000)/1000            
         return self.res
     
-    def plot(self, which_model, labels, save=False, color_threshold=None, linkage_method= 'ward'):
+    def plot(self, which_model, labels, save=False, color_threshold=None, linkage_method= 'ward', annotate = False, xy = (0,0)):
         if which_model == 'RF':
             distance = self.Dist_RF_terminal_cosine
         elif which_model == 'RF_position':
@@ -461,17 +477,29 @@ class nTreeClus:
             dendrogram(HC_tree_terminal_cosine,labels=labels, ax=ax)
         else:
             dendrogram(HC_tree_terminal_cosine,labels=labels, ax=ax, color_threshold=color_threshold)            
-        ax.tick_params(axis='x', which='major', labelsize=12, rotation=90)
+        ax.tick_params(axis='x', which='major', labelsize=15, rotation=90)
         ax.tick_params(axis='y', which='major', labelsize=15)
         if save:
             plt.savefig(f"dendrogram_{which_model}.png", dpi=300, bbox_inches='tight')
-        return plt.show()
-
+        if annotate:
+            ax.annotate(f"""
+                        F1-score = {round(self.res.loc['DT_p', 'F1S'],2)}
+                        ARS        = {round(self.res.loc['DT_p', 'ARS'],2)}
+                        RS          = {round(self.res.loc['DT_p', 'RS'],2)}
+                        Purity     = {round(self.res.loc['DT_p', 'Pur'],2)}
+                        ASW       = {round(self.res.loc['DT_p', 'Sil'],2)}
+                        1NN       = {round(self.res.loc['DT_p', '1NN'],2)}            
+                        """, xy=xy, xytext =(0, 0), fontsize=18, 
+                        textcoords='offset points', va='top', ha='left')            
+        return fig, ax
+    
     def __version__(self):
-        print('1.2.0')
+        print('1.2.1')
     
     def updates(self):
         print("""
+              - Adding Plotting option
+              - Adding Executing time.
               - Adding positional version of nTreeClus 
               - Adding 1NN to the performance metrics
               - Fixing Some bugs in performance calculation
