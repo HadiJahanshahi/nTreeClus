@@ -477,10 +477,8 @@ class nTreeClus:
             dendrogram(HC_tree_terminal_cosine,labels=labels, ax=ax)
         else:
             dendrogram(HC_tree_terminal_cosine,labels=labels, ax=ax, color_threshold=color_threshold)            
-        ax.tick_params(axis='x', which='major', labelsize=15, rotation=90)
-        ax.tick_params(axis='y', which='major', labelsize=15)
-        if save:
-            plt.savefig(f"dendrogram_{which_model}.png", dpi=300, bbox_inches='tight')
+        ax.tick_params(axis='x', which='major', labelsize=18, rotation=90)
+        ax.tick_params(axis='y', which='major', labelsize=18)
         if annotate:
             ax.annotate(f"""
                         F1-score = {round(self.res.loc['DT_p', 'F1S'],2)}
@@ -490,7 +488,9 @@ class nTreeClus:
                         ASW       = {round(self.res.loc['DT_p', 'Sil'],2)}
                         1NN       = {round(self.res.loc['DT_p', '1NN'],2)}            
                         """, xy=xy, xytext =(0, 0), fontsize=18, 
-                        textcoords='offset points', va='top', ha='left')            
+                        textcoords='offset points', va='top', ha='left')        
+        if save:
+            plt.savefig(f"dendrogram_{which_model}.png", dpi=300, bbox_inches='tight')        
         return fig, ax
     
     def __version__(self):
