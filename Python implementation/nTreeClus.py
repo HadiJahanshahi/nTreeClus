@@ -443,7 +443,7 @@ class nTreeClus:
             self.res.loc['RF_p',"1NN"] = math.ceil((self._1nn(Ground_Truth, self.Dist_RF_terminal_cosine_p))*1000)/1000            
         return self.res
     
-    def plot(self, which_model, labels, save=False, color_threshold=None):
+    def plot(self, which_model, labels, save=False, color_threshold=None, linkage_method= 'ward'):
         if which_model == 'RF':
             distance = self.Dist_RF_terminal_cosine
         elif which_model == 'RF_position':
@@ -454,7 +454,7 @@ class nTreeClus:
             distance = self.Dist_tree_terminal_cosine_p
         else:
             raise Exception(f'Model {which_model} not supported.')
-        HC_tree_terminal_cosine = linkage(distance, 'ward')
+        HC_tree_terminal_cosine = linkage(distance, linkage_method)
         fig = plt.figure(figsize=(25, 10))
         ax = fig.add_subplot(1, 1, 1)
         if color_threshold == None:
@@ -464,7 +464,7 @@ class nTreeClus:
         ax.tick_params(axis='x', which='major', labelsize=12, rotation=90)
         ax.tick_params(axis='y', which='major', labelsize=15)
         if save:
-            fig.write_image(f"dendrogram_{which_model}.png", dpi=300, bbox_inches='tight')
+            plt.savefig(f"dendrogram_{which_model}.png", dpi=300, bbox_inches='tight')
         return plt.show()
 
     def __version__(self):
