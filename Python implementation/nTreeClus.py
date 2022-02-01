@@ -459,7 +459,8 @@ class nTreeClus:
             self.res.loc['RF_p',"1NN"] = math.ceil((self._1nn(Ground_Truth, self.Dist_RF_terminal_cosine_p))*1000)/1000            
         return self.res
     
-    def plot(self, which_model, labels, save=False, color_threshold=None, linkage_method= 'ward', annotate = False, xy = (0,0)):
+    def plot(self, which_model, labels, save=False, color_threshold=None, linkage_method= 'ward', annotate = False, xy = (0,0),
+             rotation=90):
         if which_model == 'RF':
             distance = self.Dist_RF_terminal_cosine
         elif which_model == 'RF_position':
@@ -477,7 +478,7 @@ class nTreeClus:
             dendrogram(HC_tree_terminal_cosine,labels=labels, ax=ax)
         else:
             dendrogram(HC_tree_terminal_cosine,labels=labels, ax=ax, color_threshold=color_threshold)            
-        ax.tick_params(axis='x', which='major', labelsize=18, rotation=90)
+        ax.tick_params(axis='x', which='major', labelsize=18, rotation=rotation)
         ax.tick_params(axis='y', which='major', labelsize=18)
         if annotate:
             ax.annotate(f"""
