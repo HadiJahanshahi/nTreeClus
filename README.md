@@ -149,7 +149,7 @@ squareform(model.output()["distance_DT"])
 ```
 
 # Citation
-Please cite our work as below. You can have a free access to the paper in Arxiv:
+Please cite our work as below. You can have a free access to the paper on Arxiv website:
 https://arxiv.org/abs/2102.10252
 
 ```
