@@ -3,9 +3,7 @@
 
 by Hadi Jahanshahi and Mustafa Gökçe Baydoğan 
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1295516.svg)](https://doi.org/10.5281/zenodo.1295516)
-
-
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5942533.svg)](https://doi.org/10.5281/zenodo.5942533)
 
 
 
