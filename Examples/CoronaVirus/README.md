@@ -5,7 +5,7 @@ The genomes are downloadable through their accession number on National Center f
 You can have access to all of them in the `datasests` folder.
 
 |Accession Number | Abbreviation | Group Number | Description | Length (bp)|
-| :------------ |:---------------:|:-----:|:-----|-----:|
+| :------------ |:---------------|:-----:|:-----|-----:|
 |AF304460 | 1:HCoV-229E | 1 | Human coronavirus 229E | 27317 |
 |AF353511 | 1:PEDV | 1 | Porcine epidemic diarrhea virus strain | 28033 |
 |NC_005831 | 1:HCoV-NL63 | 1 | Human coronavirus NL63 | 27553 |
