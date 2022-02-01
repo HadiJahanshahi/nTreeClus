@@ -1,4 +1,4 @@
-# nTreeClus
+# nTreeClus V. 1.2.1.
 ## nTreeClus: a Tree-based Sequence Encoder for Clustering Categorical Series	
 
 by Hadi Jahanshahi and Mustafa Gökçe Baydoğan 
