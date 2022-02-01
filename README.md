@@ -153,11 +153,13 @@ Please cite our work as below. You can have a free access to the paper on Arxiv 
 https://arxiv.org/abs/2102.10252
 
 ```
-@article{jahanshahi2021ntreeclus,
-  title={nTreeClus: a Tree-based Sequence Encoder for Clustering Categorical Series},
-  author={Jahanshahi, Hadi and Baydogan, Mustafa Gokce},
-  journal={arXiv preprint arXiv:2102.10252},
-  year={2021}
+@misc{jahanshahi2021ntreeclus,
+      title={nTreeClus: a Tree-based Sequence Encoder for Clustering Categorical Series}, 
+      author={Hadi Jahanshahi and Mustafa Gokce Baydogan},
+      year={2021},
+      eprint={2102.10252},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG}
 }
 ```
 
