@@ -9,7 +9,7 @@ by Hadi Jahanshahi and Mustafa Gökçe Baydoğan
 
 
 #### Maintained by: Hadi Jahanshahi (hadijahanshahi@gmail.com)
-This is an open-source code repository for nTreeClus. nTreeClus is an intersection of the conceptions behind existing approaches, including Decision Tree Learning, k-mers, and autoregressive models for categorical time series, culminating with a novel numerical representation of the categorical sequences.
+This is an open-source code repository for [nTreeClus](https://arxiv.org/abs/2102.10252). nTreeClus is an intersection of the conceptions behind existing approaches, including Decision Tree Learning, k-mers, and autoregressive models for categorical time series, culminating with a novel numerical representation of the categorical sequences.
 
 If using this code or dataset, please cite it.
 
@@ -147,3 +147,18 @@ squareform(model.output()["distance_DT"])
 #        [ 0.68551455,  0.7226499 ,  0.86132495,  0.        ,  0.4452998 ],
 #        [ 0.43305329,  0.5       ,  0.75      ,  0.4452998 ,  0.        ]])
 ```
+
+# Citation
+Please cite our work as below. You can have a free access to the paper in Arxiv:
+https://arxiv.org/abs/2102.10252
+
+```
+@article{jahanshahi2021ntreeclus,
+  title={nTreeClus: a Tree-based Sequence Encoder for Clustering Categorical Series},
+  author={Jahanshahi, Hadi and Baydogan, Mustafa Gokce},
+  journal={arXiv preprint arXiv:2102.10252},
+  year={2021}
+}
+```
+
+
