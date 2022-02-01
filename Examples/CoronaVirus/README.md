@@ -39,3 +39,9 @@ You can have access to all of them in the `datasests` folder.
 |NC_004102 | out:HepaCF | out | Hepatitis C virus | 9646 |
 |NC_001512 | out:NyongT | out | O’nyong-nyong virus | 11835 |
 |NC_001544 | out:RossT | out | Ross River virus | 11657 |
+
+# The Dendrogram of 30 coronavirus whole genomes
+
+The below figure shows the phylogenetic tree of coronavirus genomes and outgroup genomes. Accordingly, SARS coronavirus genomes, cluster 4, are tightly clustered and are separated from other clusters.
+
+![The suggested phylogenetic tree of 30 coronavirus whole genomes using nTreeClus](https://raw.githubusercontent.com/HadiJahanshahi/nTreeClus/master/Examples/CoronaVirus/dendrogram_DT_position.png)
