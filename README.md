@@ -3,6 +3,8 @@
 
 by Hadi Jahanshahi and Mustafa Gökçe Baydoğan 
 
+Published in Neurocomputing Journal
+
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5942533.svg)](https://doi.org/10.5281/zenodo.5942533)
 
 
@@ -153,13 +155,16 @@ Please cite our work as below. You can have a free access to the paper on Arxiv 
 https://arxiv.org/abs/2102.10252
 
 ```
-@misc{jahanshahi2021ntreeclus,
-      title={nTreeClus: a Tree-based Sequence Encoder for Clustering Categorical Series}, 
-      author={Hadi Jahanshahi and Mustafa Gokce Baydogan},
-      year={2021},
-      eprint={2102.10252},
-      archivePrefix={arXiv},
-      primaryClass={cs.LG}
+@article{jahanshahi2022ntreeclus,
+   title = {nTreeClus: a Tree-based Sequence Encoder for Clustering Categorical Series},
+   journal = {Neurocomputing},
+   year = {2022},
+   issn = {0925-2312},
+   doi = {https://doi.org/10.1016/j.neucom.2022.04.076},
+   url = {https://www.sciencedirect.com/science/article/pii/S0925231222004611},
+   author = {Hadi Jahanshahi and Mustafa Gokce Baydogan},
+   keywords = {sequence mining, categorical time series, model-based clustering, pattern recognition, tree-based learning},
+   abstract = {The overwhelming presence of categorical/sequential data in diverse domains emphasizes the importance of sequence mining. The challenging nature of   sequences proves the need for continuing research to find a more accurate and faster approach providing a better understanding of their (dis)similarities. This paper proposes a new Model-based approach for clustering sequence data, namely nTreeClus. The proposed method deploys Tree-based Learners, k-mers, and autoregressive models for categorical time series, culminating with a novel numerical representation of the categorical sequences. Adopting this new representation, we cluster sequences, considering the inherent patterns in categorical time series. Accordingly, the model showed robustness to its parameter. Under different simulated scenarios, nTreeClus improved the baseline methods for various internal and external cluster validation metrics for up to 10.7% and 2.7%, respectively. The empirical evaluation using synthetic and real datasets, protein sequences, and categorical time series showed that nTreeClus is competitive or superior to most state-of-the-art algorithms.}
 }
 ```
 
