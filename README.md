@@ -3,7 +3,7 @@
 
 by Hadi Jahanshahi and Mustafa Gökçe Baydoğan 
 
-Published in Neurocomputing Journal
+Published in [Neurocomputing Journal](http://dx.doi.org/10.1016/j.neucom.2022.04.076)
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5942533.svg)](https://doi.org/10.5281/zenodo.5942533)
 
