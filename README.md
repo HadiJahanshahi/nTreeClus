@@ -155,13 +155,15 @@ https://arxiv.org/abs/2102.10252
 
 ```
 @article{jahanshahi2022ntreeclus,
-   title = {nTreeClus: a Tree-based Sequence Encoder for Clustering Categorical Series},
+   title = {nTreeClus: A tree-based sequence encoder for clustering categorical series},
    journal = {Neurocomputing},
+   volume = {494},
+   pages = {224-241},
    year = {2022},
    issn = {0925-2312},
    doi = {https://doi.org/10.1016/j.neucom.2022.04.076},
    url = {https://www.sciencedirect.com/science/article/pii/S0925231222004611},
-   author = {Hadi Jahanshahi and Mustafa Gokce Baydogan},
+   author = {Hadi Jahanshahi and Mustafa Gokce Baydogan}
 }
 ```
 
