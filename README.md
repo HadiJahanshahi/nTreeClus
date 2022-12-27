@@ -9,7 +9,7 @@ Published in the [Neurocomputing Journal](http://dx.doi.org/10.1016/j.neucom.202
 
 
 
-#### Maintained by: Hadi Jahanshahi (hadijahanshahi |at| gmail |dot| com or hadi.jahanshahi |at| ryerson |dot| ca)
+#### Maintained by: Hadi Jahanshahi (hadi.jahanshahi |at| ryerson |dot| ca)
 This is an open-source code repository for [nTreeClus](https://arxiv.org/abs/2102.10252). nTreeClus is an intersection of the conceptions behind existing approaches, including Decision Tree Learning, k-mers, and autoregressive models for categorical time series, culminating with a novel numerical representation of the categorical sequences.
 
 If using this code or dataset, please cite it.
